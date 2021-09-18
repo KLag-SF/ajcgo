@@ -1,10 +1,10 @@
 package database
 
 import (
-	"os"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/rs/zerolog/log"
+	"os"
 )
 
 func GetDB() *gorm.DB {
@@ -18,7 +18,7 @@ func GetDB() *gorm.DB {
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
-		panic(err.Error())
+		log.Fatal().Msgf("%v", err)
 	}
 
 	return db
