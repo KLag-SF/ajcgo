@@ -6,7 +6,9 @@ require (
 	github.com/gin-gonic/gin v1.7.4
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
+	github.com/oklog/ulid v1.3.1
 	github.com/rs/zerolog v1.25.0
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 )
 
 require (
@@ -23,7 +25,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
