@@ -19,12 +19,16 @@ func CreateUser(ctx *gin.Context) {
 	model.CreateUser(u.Name, u.Email, u.Password)
 }
 
+func GetUser(ctx *gin.Context) {
+	user := *model.GetUserById(ctx.Param("id"))
+	user.Password = ""
+	ctx.JSON(200, user)
+}
+
 func FindUser(ctx *gin.Context) {
 	user := model.User{}
 
-	if ctx.Query("id") != "" {
-		user = *model.GetUserById(ctx.Query("id"))
-	} else if ctx.Query("email") != "" {
+	if ctx.Query("email") != "" {
 		user = *model.GetUserByEmail(ctx.Query("email"))
 	} else if ctx.Query("name") != "" {
 		findUsers(ctx)

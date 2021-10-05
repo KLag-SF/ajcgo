@@ -28,14 +28,14 @@ func main() {
 		context.JSON(200, user)
 	})
 
-	engine.POST("/api/user/create", controller.CreateUser)
-
-	engine.GET("/api/user", controller.FindUser)
-
+	// User
+	engine.POST("/api/user", controller.CreateUser)
+	engine.GET("/api/user/:id", controller.GetUser)
+	engine.GET("/api/user/search", controller.FindUser)
 	engine.PATCH("/api/user/:id", controller.UpdateUser)
-
 	engine.DELETE("/api/user/:id", controller.DeleteUser)
-
+	// Message
+	engine.POST("/api/message")
 	if err = engine.Run(":8080"); err != nil {
 		log.Fatal().Msgf("%v", err)
 	}
