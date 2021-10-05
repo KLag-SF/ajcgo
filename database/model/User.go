@@ -16,7 +16,7 @@ type User struct {
 	Password string `gorm:"not null"`
 }
 
-func CreateUser(name string, email string, passwd string) {
+func CreateUser(name string, email string, passwd string) error {
 	db := database.GetDB()
 
 	// Hash password
@@ -28,9 +28,10 @@ func CreateUser(name string, email string, passwd string) {
 	user.ID = getULID()
 
 	if err := db.Create(&user).Error; err != nil {
-		log.Warn().Msgf("%v", err)
-		return
+		return err
 	}
+
+	return nil
 }
 
 func GetUserById(id string) *User {
@@ -69,10 +70,14 @@ func GetUserByEmail(email string) *User {
 	return &user
 }
 
-func UpdateUser(u *User) {
+func UpdateUser(u *User) (error, int) {
 	db := database.GetDB()
-
 	user := GetUserById(u.ID)
+
+	if &user == nil {
+		return nil, 404
+	}
+
 	if u.Name != "" {
 		user.Name = u.Name
 	}
@@ -88,18 +93,20 @@ func UpdateUser(u *User) {
 	log.Debug().Msgf("%+v", user)
 
 	if err := db.Save(&user).Error; err != nil {
-		log.Warn().Msgf("%v", err)
-		return
+		return err, 500
 	}
+
+	return nil, 200
 }
 
-func DeleteUser(id string) {
+func DeleteUser(id string) error {
 	db := database.GetDB()
 
 	if err := db.Delete(&User{}, id).Error; err != nil {
-		log.Warn().Msgf("%v", err)
-		return
+		return err
 	}
+
+	return nil
 }
 
 func getULID() string {
