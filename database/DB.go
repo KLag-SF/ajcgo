@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/rs/zerolog/log"
@@ -11,7 +12,7 @@ func GetDB() *gorm.DB {
 	DBMS := os.Getenv("DBMS")
 	USER := os.Getenv("DB_USER")
 	PASS := os.Getenv("DB_PASS")
-	PROTOCOL := "tcp(localhost:3306)"
+	PROTOCOL := fmt.Sprintf("tcp(%v)", os.Getenv("DB_ADDR"))
 	DBNAME := os.Getenv("DB")
 
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
