@@ -35,9 +35,11 @@ func main() {
 	engine.PATCH("/api/user/:id", controller.UpdateUser)
 	engine.DELETE("/api/user/:id", controller.DeleteUser)
 	// Message
-	engine.POST("/api/message")
-	engine.GET("/api/message/:id")
-	engine.DELETE("/api/message/:id")
+	engine.POST("/api/message", controller.CreateMessage)
+	engine.GET("/api/message/:id", controller.GetMessage)
+	engine.GET("/api/message/user/:uid", controller.FindMessages)
+	engine.DELETE("/api/message/:id", controller.DeleteMessage)
+	engine.DELETE("/api/message/user/:uid", controller.DeleteAllMessages)
 
 	if err = engine.Run(":8080"); err != nil {
 		log.Fatal().Msgf("%v", err)
