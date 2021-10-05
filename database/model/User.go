@@ -16,18 +16,18 @@ type User struct {
 	Password string `gorm:"not null"`
 }
 
-func CreateUser(name string, email string, passwd string) error {
+func CreateUser(u *User) error {
 	db := database.GetDB()
 
 	// Hash password
-	bytePW := []byte(passwd)
+	bytePW := []byte(u.Password)
 	hashedPW, _ := bcrypt.GenerateFromPassword(bytePW, 10)
 
 	// Create new user
-	user := User{Name: name, Email: email, Password: string(hashedPW)}
-	user.ID = getULID()
+	u.ID = getULID()
+	u.Password = string(hashedPW)
 
-	if err := db.Create(&user).Error; err != nil {
+	if err := db.Create(u).Error; err != nil {
 		return err
 	}
 

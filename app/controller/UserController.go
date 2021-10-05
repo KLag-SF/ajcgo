@@ -16,7 +16,7 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	err = model.CreateUser(u.Name, u.Email, u.Password)
+	err = model.CreateUser(&u)
 	if err != nil {
 		log.Warn().Msgf("%v", err)
 		ctx.Status(500)
