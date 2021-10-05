@@ -15,7 +15,7 @@ func GetDB() *gorm.DB {
 	PROTOCOL := fmt.Sprintf("tcp(%v)", os.Getenv("DB_ADDR"))
 	DBNAME := os.Getenv("DB")
 
-	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
+	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?parseTime=true"
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
