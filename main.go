@@ -1,9 +1,13 @@
 package main
 
 import (
+	"ajcgo/app/Middleware"
+	"ajcgo/app/auth"
 	"ajcgo/app/controller"
 	"ajcgo/database/model"
 	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
@@ -17,6 +21,9 @@ func main() {
 	}
 
 	engine := gin.Default()
+
+	store := cookie.NewStore([]byte("secret"))
+	engine.Use(sessions.Sessions("mySession", store))
 
 	engine.GET("/test", func(context *gin.Context) {
 		user := model.User{Name: "kokkun312312", Email: "oguiku"}
@@ -40,7 +47,15 @@ func main() {
 	engine.GET("/api/message/user/:uid", controller.FindMessages)
 	engine.DELETE("/api/message/:id", controller.DeleteMessage)
 	engine.DELETE("/api/message/user/:uid", controller.DeleteAllMessages)
-
+	// Login
+	engine.GET("/login", nil)
+	engine.POST("/login", auth.Login)
+	// Authenticated user only
+	authUserGroup := engine.Group("/auth")
+	authUserGroup.Use(Middleware.LoginCheck())
+	{
+		authUserGroup.GET("/")
+	}
 	if err = engine.Run(":8080"); err != nil {
 		log.Fatal().Msgf("%v", err)
 	}
