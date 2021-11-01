@@ -21,6 +21,7 @@ func main() {
 	}
 
 	engine := gin.Default()
+	engine.LoadHTMLGlob("resources/templates/*.html")
 
 	store := cookie.NewStore([]byte("secret"))
 	engine.Use(sessions.Sessions("mySession", store))
@@ -35,6 +36,9 @@ func main() {
 		context.JSON(200, user)
 	})
 
+	engine.GET("/", func(context *gin.Context) {
+		context.HTML(200, "index.html", nil)
+	})
 	// User
 	engine.POST("/api/user", controller.CreateUser)
 	engine.GET("/api/user/:id", controller.GetUser)
@@ -48,13 +52,22 @@ func main() {
 	engine.DELETE("/api/message/:id", controller.DeleteMessage)
 	engine.DELETE("/api/message/user/:uid", controller.DeleteAllMessages)
 	// Login
-	engine.GET("/login", nil)
+	engine.GET("/login", func(context *gin.Context) {
+		context.Status(404)
+	})
 	engine.POST("/login", auth.Login)
 	// Authenticated user only
 	authUserGroup := engine.Group("/auth")
 	authUserGroup.Use(Middleware.LoginCheck())
 	{
-		authUserGroup.GET("/")
+		authUserGroup.GET("/", func(context *gin.Context) {
+			type test struct {
+				message string
+			}
+			msg := test{message: "You're logged in!"}
+			context.JSON(200, msg)
+		})
+
 	}
 	if err = engine.Run(":8080"); err != nil {
 		log.Fatal().Msgf("%v", err)
